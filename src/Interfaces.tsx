@@ -14,7 +14,7 @@ export interface IEpisode {
 };
 
 export interface IState {
-    episodes: Array<any>,
+    episodes: Array<IEpisode>,
     favorites: Array<any>
 };
 

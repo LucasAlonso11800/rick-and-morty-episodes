@@ -20,8 +20,10 @@ function App() {
     }, []);
 
     function toggleFav(episode: IEpisode) {
+        const episodeIsInFav = state.favorites.includes(episode);
+        const type = episodeIsInFav ? 'REMOVE_FAV' : 'ADD_FAV';
         return dispatch({
-            type: 'ADD_FAV',
+            type: type,
             payload: episode
         })
     };
@@ -42,7 +44,9 @@ function App() {
                                 <p>Number: {episode.number}</p>
                                 <button type="button"
                                     onClick={() => toggleFav(episode)}
-                                >Fav</button>
+                                >
+                                    {state.favorites.find((fav: IEpisode) => fav.id === episode.id) ? 'Unfav' : 'Fav'}
+                                </button>
                             </div>
                         </article>
                     )
