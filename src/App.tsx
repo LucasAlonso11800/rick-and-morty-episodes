@@ -1,15 +1,55 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 import { Store } from './Store';
+import { IEpisode, IAction } from './Interfaces';
 
 function App() {
-    const store = useContext(Store)
-    console.log(store)
+    const { state, dispatch } = useContext(Store)
+
+    useEffect(() => {
+        (async function fetchData() {
+            const url = 'http://api.tvmaze.com/shows/216/episodes'
+            const data = await (await axios.get(url)).data
+
+            return dispatch({
+                type: 'FETCH_DATA',
+                payload: data
+            })
+        })()
+    }, []);
+
+    function toggleFav(episode: IEpisode) {
+        return dispatch({
+            type: 'ADD_FAV',
+            payload: episode
+        })
+    };
+
     return (
-        <div>
-            <h1>Rick & Morty</h1>
-        </div>
+        <>
+            <header className="header">
+                <h1>Rick & Morty</h1>
+            </header>
+            <section className="episode-layout">
+                {state.episodes.map((episode: IEpisode) => {
+                    return (
+                        <article className="episode-box" key={episode.id}>
+                            <img src={episode.image?.medium} alt={episode.name} />
+                            <h4>{episode.name}</h4>
+                            <div>
+                                <p>Season: {episode.season}</p>
+                                <p>Number: {episode.number}</p>
+                                <button type="button"
+                                    onClick={() => toggleFav(episode)}
+                                >Fav</button>
+                            </div>
+                        </article>
+                    )
+                })}
+            </section>
+        </>
     );
-}
+};
 
 export default App;
