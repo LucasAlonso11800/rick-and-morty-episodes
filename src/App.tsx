@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import { Store } from './Store';
 import { IEpisode, IAction } from './Interfaces';
+import Episode from './Episode';
 
 function App() {
     const { state, dispatch } = useContext(Store)
@@ -19,39 +20,15 @@ function App() {
         })()
     }, []);
 
-    function toggleFav(episode: IEpisode) {
-        const episodeIsInFav = state.favorites.includes(episode);
-        const type = episodeIsInFav ? 'REMOVE_FAV' : 'ADD_FAV';
-        return dispatch({
-            type: type,
-            payload: episode
-        })
-    };
-
     return (
         <>
             <header className="header">
                 <h1>Rick & Morty</h1>
+                <p>Pick your favorite episodes</p>
             </header>
-            <section className="episode-layout">
-                {state.episodes.map((episode: IEpisode) => {
-                    return (
-                        <article className="episode-box" key={episode.id}>
-                            <img src={episode.image?.medium} alt={episode.name} />
-                            <h4>{episode.name}</h4>
-                            <div>
-                                <p>Season: {episode.season}</p>
-                                <p>Number: {episode.number}</p>
-                                <button type="button"
-                                    onClick={() => toggleFav(episode)}
-                                >
-                                    {state.favorites.find((fav: IEpisode) => fav.id === episode.id) ? 'Unfav' : 'Fav'}
-                                </button>
-                            </div>
-                        </article>
-                    )
-                })}
-            </section>
+            <main className="episode-layout">
+                {state.episodes.map((episode: IEpisode) => <Episode episode={episode} />)}
+            </main>
         </>
     );
 };
