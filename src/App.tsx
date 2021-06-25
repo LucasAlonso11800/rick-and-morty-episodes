@@ -1,9 +1,13 @@
 import React, { useContext, useEffect } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import { Store } from './Store';
 import { IEpisode, IAction } from './Interfaces';
 import Episode from './Episode';
+// Pages
+import HomePage from './HomePage';
+import FavPage from './FavPage';
 
 function App() {
     const { state, dispatch } = useContext(Store)
@@ -21,15 +25,10 @@ function App() {
     }, []);
 
     return (
-        <>
-            <header className="header">
-                <h1>Rick & Morty</h1>
-                <p>Pick your favorite episodes</p>
-            </header>
-            <main className="episode-layout">
-                {state.episodes.map((episode: IEpisode) => <Episode episode={episode} />)}
-            </main>
-        </>
+        <Router>
+            <Route path="/" exact component={HomePage} />
+            <Route path="/fav" exact component={FavPage} />
+        </Router>
     );
 };
 
